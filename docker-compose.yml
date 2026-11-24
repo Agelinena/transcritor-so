@@ -1,0 +1,16 @@
+services:
+  transcritor:
+    build: .
+    image: transcritor-so:cpu
+    ports:
+      - "${PORTA:-5000}:5000"
+    environment:
+      TRANSCRITOR_WORKERS: ${WORKERS:-3}
+      TRANSCRITOR_POLITICA: ${POLITICA:-fifo}
+      TRANSCRITOR_DISPOSITIVO: ${DISPOSITIVO:-auto}
+    volumes:
+      - dados:/dados
+    stop_grace_period: 15s
+
+volumes:
+  dados:

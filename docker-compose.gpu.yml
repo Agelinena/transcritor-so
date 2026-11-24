@@ -1,0 +1,13 @@
+services:
+  transcritor:
+    build:
+      args:
+        GPU: "1"
+    image: transcritor-so:gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu, utility]

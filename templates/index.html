@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transcritor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+  <header class="topo">
+    <div class="marca">
+      <svg class="onda" viewBox="0 0 44 28" aria-hidden="true">
+        <rect x="0" y="10" width="4" height="8" rx="2"/><rect x="8" y="4" width="4" height="20" rx="2"/>
+        <rect x="16" y="0" width="4" height="28" rx="2"/><rect x="24" y="6" width="4" height="16" rx="2"/>
+        <rect x="32" y="2" width="4" height="24" rx="2"/><rect x="40" y="11" width="4" height="6" rx="2"/>
+      </svg>
+      <div>
+        <h1>Transcritor</h1>
+        <p>Transcrição de áudio e vídeo no seu computador, sem mandar nada para a internet</p>
+      </div>
+    </div>
+    <div class="topo-direita">
+      <span id="chip-dispositivo" class="chip">detectando…</span>
+      <a class="link" id="link-grafana" href="#" target="_blank" rel="noopener">Monitoramento ↗</a>
+    </div>
+  </header>
+
+  <main class="grade">
+    <section class="coluna-principal">
+      <div class="cartao">
+        <h2>Nova transcrição</h2>
+        <form id="form-envio">
+          <label class="area-arquivos" id="area-arquivos">
+            <input type="file" id="arquivos" name="arquivos" multiple accept="audio/*,video/*">
+            <strong>Arraste os arquivos aqui</strong>
+            <span>ou clique para escolher · áudio ou vídeo, vários de uma vez</span>
+            <span id="escolhidos" class="escolhidos"></span>
+          </label>
+          <div class="linha-campos">
+            <label>Modelo
+              <select id="modelo" name="modelo"></select>
+            </label>
+            <label>Idioma
+              <select id="idioma" name="idioma">
+                {% for codigo, nome in idiomas.items() %}<option value="{{ codigo }}">{{ nome }}</option>{% endfor %}
+              </select>
+            </label>
+            <button type="submit" id="botao-enviar">Transcrever</button>
+          </div>
+          <p id="mensagem" class="mensagem"></p>
+        </form>
+      </div>
+
+      <div class="cartao">
+        <div class="cabecalho-cartao">
+          <h2>Transcrições</h2>
+          <span id="resumo-fila" class="discreto"></span>
+        </div>
+        <table class="tabela">
+          <thead><tr><th>Arquivo</th><th>Duração</th><th>Modelo</th><th>Situação</th><th>Worker</th><th></th></tr></thead>
+          <tbody id="lista-jobs"><tr><td colspan="6" class="vazio">Nenhuma transcrição ainda</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="coluna-lateral">
+      <div class="cartao">
+        <h2>Seu computador</h2>
+        <dl id="info-sistema" class="info"></dl>
+      </div>
+
+      <div class="cartao">
+        <h2>Modelos</h2>
+        <p class="discreto">Os que cabem neste computador. O recomendado já vem marcado.</p>
+        <ul id="lista-modelos" class="modelos"></ul>
+      </div>
+
+      <div class="cartao">
+        <div class="cabecalho-cartao">
+          <h2>Workers</h2>
+          <div class="alternador" id="politica">
+            <button type="button" data-politica="fifo">FIFO</button>
+            <button type="button" data-politica="sjf">SJF</button>
+          </div>
+        </div>
+        <p class="discreto" id="info-motor"></p>
+        <ul id="lista-workers" class="workers"></ul>
+      </div>
+    </aside>
+  </main>
+
+  <dialog id="detalhe">
+    <div class="cabecalho-cartao">
+      <h2 id="detalhe-titulo"></h2>
+      <button type="button" class="fechar" id="fechar-detalhe" aria-label="Fechar">×</button>
+    </div>
+    <p id="detalhe-info" class="discreto"></p>
+    <div class="acoes">
+      <a id="baixar-txt" class="botao-secundario">Baixar TXT</a>
+      <a id="baixar-srt" class="botao-secundario">Baixar SRT (legenda)</a>
+      <button type="button" id="copiar" class="botao-secundario">Copiar texto</button>
+    </div>
+    <ol id="detalhe-trechos" class="trechos"></ol>
+  </dialog>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 2s
+  evaluation_interval: 2s
+
+scrape_configs:
+  - job_name: transcritor
+    static_configs:
+      - targets:
+          - transcritor:5000
+          - host.docker.internal:5000
